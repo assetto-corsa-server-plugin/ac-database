@@ -1,7 +1,7 @@
 const express = require('express');
 const qs = require('qs');
 const bodyParser = require('body-parser');
-const routers = require('./routers').router;
+const routers = require('./routers').routers;
 const config = require('./config');
 
 const app = express();
