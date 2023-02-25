@@ -12,16 +12,16 @@ app.set('query parser', (str) => {
 
 app.use(bodyParser.json());
 
-const router = express.Router();
+const r = express.Router();
 for (const router of routers) {
     if (router.type === 'get' || router.type === undefined) {
-        router.route(router.route).get(router.router);
+        r.route(router.route).get(router.router);
     } else {
-        router.route(router.route).post(router.router);
+        r.route(router.route).post(router.router);
     }
 }
 
-app.use('/', router);
+app.use('/', r);
 
 app.listen(config.PORT, () => {
     console.log('listening on port ' + config.PORT);
