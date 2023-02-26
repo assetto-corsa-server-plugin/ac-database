@@ -30,7 +30,7 @@ class Routers {
             {
                 route: '/personalbest',
                 router: (req, res) => {
-                    this.connection.query(`SELECT * FROM personalbest WHERE track=${req.query.track} AND model=${req.query.model} AND guid=${req.query.guid}`, (error, results) => {
+                    this.connection.query(`SELECT * FROM personalbest WHERE track='${req.query.track}' AND model='${req.query.model}' AND guid=${req.query.guid}`, (error, results) => {
                         if ((results !== undefined) && (results.length > 0))  this.connection.query(`UPDATE personalbest SET guid=${req.query.guid} AND laptime=${req.body.laptime} WHERE track='${this.track}' AND model='${req.query.model}'`, (error, results) => {});
                         else this.connection.query(`INSERT INTO personalbest (guid, laptime, track, model) VALUES(${req.query.guid}, ${req.body.laptime}, '${this.track}', '${req.query.model}')`, (error, results) => {});
                     });
@@ -41,7 +41,7 @@ class Routers {
             {
                 route: '/trackbest',
                 router: (req, res) => {
-                    this.connection.query(`SELECT * FROM trackbest WHERE track=${req.query.track} AND model=${req.query.model}`, (error, results) => {
+                    this.connection.query(`SELECT * FROM trackbest WHERE track='${req.query.track}' AND model='${req.query.model}'`, (error, results) => {
                         if ((results !== undefined) && (results.length > 0))  this.connection.query(`UPDATE personalbest SET guid=${req.body.guid} AND laptime=${req.body.laptime} WHERE track='${this.track}' AND model='${req.query.model}'`, (error, results) => {});
                         else this.connection.query(`INSERT INTO trackbest (guid, laptime, track, model) VALUES(${req.body.guid}, ${req.body.laptime}, '${this.track}', '${req.query.model}')`, (error, results) => {});
                     });
