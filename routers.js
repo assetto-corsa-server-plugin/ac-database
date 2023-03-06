@@ -8,7 +8,7 @@ class Routers {
         this.connection.query('CREATE TABLE IF NOT EXISTS personalbest(guid CHAR(17), laptime INT, model CHAR(15), track CHAR(30))');
         this.connection.query('CREATE TABLE IF NOT EXISTS trackbest(guid CHAR(17), laptime INT, model CHAR(15), track CHAR(30))');
         this.connection.query('CREATE TABLE IF NOT EXISTS username(guid CHAR(17), username CHAR(30))');
-        this.connection.query('CREATE TABLE IF NOT EXISTS trackname(trackname VARCHAR, username CHAR(32))');
+        this.connection.query('CREATE TABLE IF NOT EXISTS trackname(trackname VARCHAR(255), username CHAR(32))');
         this.routers = [
             {
                 route: '/personalbest',
