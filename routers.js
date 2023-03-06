@@ -26,9 +26,7 @@ class Routers {
                         this.connection.query(`SELECT username FROM username WHERE guid='${req.query.guid}`, (error, results2) => {
                             res.json(((results !== undefined) && (results.length > 0)) ? {laptime: results[0].laptime, username: ((results2 !== undefined) && (results2.length > 0)) ? results2[0].username : '', guid: results[0].guid} : undefined);
                         });
-                        this.connection.commit();
                     });
-                    this.connection.commit();
                 }
             },
             {
@@ -37,7 +35,6 @@ class Routers {
                     this.connection.query(`SELECT * FROM trackname WHERE track='${req.query.track}'`, (error, results) => {
                         res.json({trackname: ((results !== undefined) && (results.length > 0)) ? results[0].trackname : req.query.track});
                     });
-                    this.connection.commit();
                 }
             },
             {
