@@ -1,6 +1,7 @@
 const express = require('express');
 const qs = require('qs');
 const bodyParser = require('body-parser');
+const fs = require('fs');
 const routers = require('./routers').routers;
 const config = require('./config');
 
@@ -9,6 +10,12 @@ const app = express();
 app.set('query parser', (str) => {
     return qs.parse(str)
 });
+
+app.use((err, req, res, next) => {
+    console.error(err, req.query, req.body);
+    fs.writeFile(`/logs/${Date.now()}.log`, 'utf8', String(err) + '\n\n' + String(req));
+});
+
 
 app.use(bodyParser.json());
 
