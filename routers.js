@@ -24,9 +24,13 @@ class Routers {
                 route: '/trackbest',
                 router: (req, res) => {
                     this.connection.query(`SELECT * FROM trackbest WHERE model='${req.query.model}' AND track='${req.query.track}'`, (error, results) => {
-                        this.connection.query(`SELECT username FROM username WHERE guid=${req.query.guid}`, (error, results2) => {
-                            res.json(((results !== undefined) && (results.length > 0)) ? {laptime: results[0].laptime, username: ((results2 !== undefined) && (results2.length > 0)) ? results2[0].username : '', guid: results[0].guid} : undefined);
-                        });
+                        if ((results !== undefined) && (results.length > 0)) {
+                            this.connection.query(`SELECT username FROM username WHERE guid=${results[0].guid}`, (error, results2) => {
+                                res.json({laptime: results[0].laptime, username: ((results2 !== undefined) && (results2.length > 0)) ? results2[0].username : '', guid: results[0].guid});
+                            });
+                        } else {
+                            res.json({});
+                        }
                     });
                 }
             },
