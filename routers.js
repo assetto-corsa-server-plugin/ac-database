@@ -8,7 +8,8 @@ class Routers {
         this.connection.query('CREATE TABLE IF NOT EXISTS personalbest(guid CHAR(17), laptime INT, model CHAR(15), track CHAR(30))');
         this.connection.query('CREATE TABLE IF NOT EXISTS trackbest(guid CHAR(17), laptime INT, model CHAR(15), track CHAR(30))');
         this.connection.query('CREATE TABLE IF NOT EXISTS username(guid CHAR(17), username CHAR(30))');
-        this.connection.query('CREATE TABLE IF NOT EXISTS trackname(trackname VARCHAR(255), username CHAR(32))');
+        this.connection.query('CREATE TABLE IF NOT EXISTS trackname(trackname VARCHAR(255), track CHAR(32))');
+        this.connection.query('CREATE TABLE IF NOT EXISTS carname(carname VARCHAR(255), car CHAR(32))');
         this.routers = [
             {
                 route: '/personalbest',
@@ -26,14 +27,6 @@ class Routers {
                         this.connection.query(`SELECT username FROM username WHERE guid='${req.query.guid}`, (error, results2) => {
                             res.json(((results !== undefined) && (results.length > 0)) ? {laptime: results[0].laptime, username: ((results2 !== undefined) && (results2.length > 0)) ? results2[0].username : '', guid: results[0].guid} : undefined);
                         });
-                    });
-                }
-            },
-            {
-                route: '/trackname',
-                router: (req, res) => {
-                    this.connection.query(`SELECT * FROM trackname WHERE track='${req.query.track}'`, (error, results) => {
-                        res.json({trackname: ((results !== undefined) && (results.length > 0)) ? results[0].trackname : req.query.track});
                     });
                 }
             },
@@ -77,17 +70,21 @@ class Routers {
                 type: 'post'
             },
             {
-                route: '/trackname',
+                route: '/contents',
                 router: (req, res) => {
-                    this.connection.query(`SELECT trackname FROM trackname WHERE track=${req.query.track}`, (err, results) => {
-                        if ((results !== undefined) && (results.length > 0))  {
-                            if (results[0].trackname !== req.body.trackname) this.connection.query(`UPDATE trackname SET trackname=? WHERE track=${req.query.track}`, [req.body.trackname], (error, results) => {});
-                        } else {
-                            this.connection.query(`INSERT INTO trackname (trackname, track) VALUES(?, ${req.query.track})`, [req.body.trackname], (error, results) => {});
-                        }
-                        this.connection.commit();
-                    });
                     res.end();
+                    const type = req.query.type;
+                    for (const key of Object.keys(req.body)) {
+                        const content = req.body[key];
+                        this.connection.query(`SELECT * FROM ${type}name WHERE ${type}='${key}'`, (err, results) => {
+                            if ((results !== undefined) && (results.length > 0))  {
+                                if (results[0].trackname !== req.body.trackname) this.connection.query(`UPDATE ${type}name SET ${track}name='${content}' WHERE ${type}='${key}'`, (error, results) => {});
+                            } else {
+                                this.connection.query(`INSERT INTO ${type}name (${type}name, ${type}) VALUES('${content}', '${key}')`, (error, results) => {});
+                            }
+                            this.connection.commit();
+                        });
+                    }
                 },
                 type: 'post'
             }
