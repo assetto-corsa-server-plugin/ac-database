@@ -78,7 +78,7 @@ class Routers {
                         const content = req.body[key];
                         this.connection.query(`SELECT * FROM ${type}name WHERE ${type}='${key}'`, (err, results) => {
                             if ((results !== undefined) && (results.length > 0))  {
-                                if (results[0].trackname !== req.body.trackname) this.connection.query(`UPDATE ${type}name SET ${track}name='${content}' WHERE ${type}='${key}'`, (error, results) => {});
+                                    if (results[0][`${type}name`] !== req.body[`${type}name`]) this.connection.query(`UPDATE ${type}name SET ${type}name='${content}' WHERE ${type}='${key}'`, (error, results) => {});
                             } else {
                                 this.connection.query(`INSERT INTO ${type}name (${type}name, ${type}) VALUES('${content}', '${key}')`, (error, results) => {});
                             }
